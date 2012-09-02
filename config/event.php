@@ -6,13 +6,13 @@ return array(
 		// run before filters 
     'controller_started' => function()
     {
-      Filter::run('before');
+      Filter::instance()->run('before');
     },
     
     // run after filters
     'controller_finished' => function()
     {
-      Filter::run('after');
+      Filter::instance()->run('after');
     },
 	),
 );

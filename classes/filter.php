@@ -71,7 +71,7 @@ class Filter {
 	 * @static
 	 * @return void
 	 */
-	public static function _init()
+	public static function instance()
 	{
 		if (is_null(self::$instance))
 		{
@@ -90,6 +90,7 @@ class Filter {
 				$controller->{self::filter_method}();
 			}
 		}
+		return static::$instance;
 	}
 	
 	/**
