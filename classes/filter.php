@@ -163,7 +163,7 @@ class Filter {
 		{
 			foreach (static::$filters as $method => $filter)
 			{
-				if (static::has_input_method($event) and static::has_request_action($filter, $event))
+				if (static::has_input_method($filter) and static::has_request_action($filter, $event))
 				{
 					$controller = Request::active()->controller_instance;
 					
@@ -194,7 +194,7 @@ class Filter {
 						else
 						{
 							// throw an exception to notify user
-							throw new FuelException("filter doesn't exists: ".$method);
+							throw new InvalidArgumentException("filter doesn't exists: ".$method);
 						}	
 					}
 				}
@@ -277,7 +277,8 @@ class Filter {
 	
 	
 	/**
-	 * Check if request fit inputs conditions.
+	 * Check if request fit inputs methods conditions.
+	 * Also check for ajax request
 	 * 
 	 * @access protected
 	 * @param mixed $event
@@ -285,6 +286,10 @@ class Filter {
 	 */
 	protected static function has_input_method($filter)
 	{
+		if (isset($filter['method']) and in_array('ajax', $filter['method']))
+		{
+			return Input::is_ajax();
+		}
 		return (! isset($filter['method']) or in_array(strtolower(Input::method()), $filter['method']));
 	}
 }

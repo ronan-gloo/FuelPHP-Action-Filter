@@ -16,7 +16,7 @@ Filter’s name can be a embedded controller’s method or a class.
 
 -   **only**: run filter only on defined actions
 -   **except**: skip filter on defined actions
--   **on**: run filter on defined http methods (get, post, put…etc)
+-   **on**: run filter on defined http methods (get, post, put …etc) and 'ajax'
 
 1. Setup filters as class properties
 ------------------------------------
