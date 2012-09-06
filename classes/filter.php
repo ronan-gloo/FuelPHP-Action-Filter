@@ -237,7 +237,7 @@ class Filter {
 				static::register($event, $name);
 				
 				// Filter args and run methods
-				foreach (array_intersect_key(static::$args, $args) as $key => $val)
+				foreach (array_intersect_key($args, array_flip(static::$args)) as $key => $val)
 				{
 					call_user_func_array(array(static::$instance, $key), (array)$val);
 				}

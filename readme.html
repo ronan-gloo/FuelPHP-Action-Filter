@@ -1,0 +1,74 @@
+<h1>FuelPHP action filters</h1>
+<p>Custom implemetation of rails filters for fuelPHP framework.</p>
+
+<h3>Filters</h3>
+<p>Filter's name can be a embedded controller's method or a class.<br /></p>
+
+<ul>
+	<li><strong>before</strong>: filter is called on controller_started event</li>
+	<li><strong>after</strong>: filter is called on controller_finished</li>
+	<li><strong>around</strong>: filter is called on both controller_started and controller_finished events</li>
+</ul>
+
+<h3>Filters configuration</h3>
+<ul>
+	<li><strong>only</strong>: run filter only on defined actions</li>
+	<li><strong>except</strong>: skip filter on defined actions</li>
+	<li><strong>on</strong>: run filter on defined http methods (get, post, put...etc)</li>
+</ul>
+
+<h2>1. Setup filters as class properties</h2>
+<p>Run 'ajax_only' method on get or post, except for action_index()</p>
+<pre>
+public $before_filter = array(
+	'ajax_only' => array(
+		'except'	=> 'index',
+		'on'		=> array('get', 'post')
+	)
+);
+
+public function ajax_only()
+{
+	if( ! Input::is_ajax())
+	{
+		throw new HttpNotFoundException;
+	}
+}
+</pre>
+
+<h2>2. Setup filters under filter() method</h2>
+<p>You can set filters by using Filter class</p>
+<pre>
+public function filter()
+{
+	Filter::register('after', 'updated')->only('add', 'edit', 'delete')->on('post');
+}
+
+public function updated()
+{
+	// do something here...
+}
+</pre>
+
+<h2>3. Calling a class instead of embedded controller's method</h2>
+<p>It's possible to use a class as filter, and optionnaly specify a method.<br />
+The controller instance and event name are passed to the constructor, or the method if provided in filter name.
+</p>
+
+<i>Controller</i>:
+<pre>
+public $around_filter = array('Bench::action')
+</pre>
+
+<i>class Bench</i>:
+<pre>
+class Bench {
+	
+	public static function action($controller, $event)
+	{
+		$msg = get_class($controller).' '.$event.' '.$controller->request->action;
+		
+		Profiler::mark_memory($controller, $msg);
+	}
+	
+}</pre>
