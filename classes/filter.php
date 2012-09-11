@@ -275,7 +275,6 @@ class Filter {
 		return false;
 	}
 	
-	
 	/**
 	 * Check if request fit inputs methods conditions.
 	 * Also check for ajax request
@@ -286,10 +285,12 @@ class Filter {
 	 */
 	protected static function has_input_method($filter)
 	{
+		$methods[] = strtolower(Input::method());
+		
 		if (isset($filter['method']) and in_array('ajax', $filter['method']))
 		{
-			return Input::is_ajax();
+			$methods[] = Input::is_ajax() ? 'ajax' : null;
 		}
-		return (! isset($filter['method']) or in_array(strtolower(Input::method()), $filter['method']));
+		return (! isset($filter['method']) or ! array_intersect($filter['method'], $methods));
 	}
 }
